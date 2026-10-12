@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
+import { PlanTab } from '@/components/billing/plan-tab'
 import { ConfirmSubmit } from '@/components/forms/buttons'
 import { inputClass } from '@/components/forms/fields'
 import {
@@ -39,11 +40,12 @@ const TABS = [
   { key: 'clinica', label: 'Clínica' },
   { key: 'agenda', label: 'Agenda' },
   { key: 'equipo', label: 'Equipo y roles' },
+  { key: 'plan', label: 'Plan y facturación' },
   { key: 'perfil', label: 'Mi perfil' },
 ] as const
 type Tab = (typeof TABS)[number]['key']
 
-type Props = { searchParams: Promise<{ tab?: string; ok?: string; error?: string }> }
+type Props = { searchParams: Promise<{ tab?: string; ok?: string; error?: string; mp?: string }> }
 
 export default async function ConfiguracionPage({ searchParams }: Props) {
   const sp = await searchParams
@@ -64,6 +66,8 @@ export default async function ConfiguracionPage({ searchParams }: Props) {
         readOnly={!manager}
       />
     )
+  } else if (tab === 'plan') {
+    content = <PlanTab supabase={supabase} clinic={clinic} userEmail={user.email} mp={sp.mp} />
   } else if (tab === 'equipo') {
     content = <TeamTab />
   } else {

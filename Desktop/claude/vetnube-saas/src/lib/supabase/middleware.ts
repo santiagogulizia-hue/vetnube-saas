@@ -1,7 +1,8 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const PUBLIC_PATHS = ['/login', '/auth']
+// /api/webhooks: Mercado Pago llama sin sesión (cada webhook valida su propia firma)
+const PUBLIC_PATHS = ['/login', '/auth', '/api/webhooks']
 
 /** Refresca la sesión en cada request y protege las rutas privadas. */
 export async function updateSession(request: NextRequest) {

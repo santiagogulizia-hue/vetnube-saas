@@ -5,10 +5,10 @@ import { usePathname } from 'next/navigation'
 import { Sidebar } from './sidebar'
 import { Topbar, type ShellUser } from './topbar'
 
-type Props = { clinicName: string; user: ShellUser; children: React.ReactNode }
+type Props = { clinicName: string; user: ShellUser; banner?: React.ReactNode; children: React.ReactNode }
 
 /** Estructura de la app: menú lateral fijo en escritorio, cajón desplegable en celulares. */
-export function AppShell({ clinicName, user, children }: Props) {
+export function AppShell({ clinicName, user, banner, children }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
 
@@ -26,6 +26,7 @@ export function AppShell({ clinicName, user, children }: Props) {
       <Sidebar clinicName={clinicName} open={menuOpen} onClose={() => setMenuOpen(false)} />
       <div className="flex min-w-0 flex-col">
         <Topbar user={user} menuOpen={menuOpen} onMenu={() => setMenuOpen(true)} />
+        {banner}
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
       </div>
     </div>

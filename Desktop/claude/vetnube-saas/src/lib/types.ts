@@ -26,6 +26,11 @@ export type Clinic = {
   currency: string
   settings: ClinicSettings | null
   role: MemberRole
+  // Suscripción a VetNube (migración 20261013000000_billing.sql)
+  plan: string
+  subscription_status: import('@/lib/billing').SubscriptionStatus
+  trial_ends_at: string
+  next_billing_at: string | null
 }
 
 /** Turno con los datos que muestran la agenda y su detalle */

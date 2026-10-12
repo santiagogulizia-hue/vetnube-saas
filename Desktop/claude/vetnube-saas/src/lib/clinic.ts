@@ -21,16 +21,21 @@ export const getSession = cache(async () => {
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const [{ data: profile }, { data: memberships }, cookieStore] = await Promise.all([
+  const [{ data: profile }, { data: memberships, error: membershipsError }, cookieStore] = await Promise.all([
     supabase.from('profiles').select('full_name').eq('id', user.id).maybeSingle(),
     supabase
       .from('clinic_members')
-      .select('role, clinic:clinics(id, name, timezone, currency, settings)')
+      .select('role, clinic:clinics(id, name, timezone, currency, settings, plan, subscription_status, trial_ends_at, next_billing_at)')
       .eq('user_id', user.id)
       .eq('active', true)
       .order('created_at'),
     cookies(),
   ])
+
+  // Columna inexistente: falta ejecutar una migración (mejor un error claro que mandar al onboarding)
+  if (membershipsError?.code === '42703') {
+    throw new Error('Falta ejecutar la migración supabase/migrations/20261013000000_billing.sql en Supabase.')
+  }
 
   const sessionUser: SessionUser = {
     id: user.id,

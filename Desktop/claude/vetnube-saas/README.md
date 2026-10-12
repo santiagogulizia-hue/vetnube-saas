@@ -39,5 +39,6 @@ Ejecutar en Supabase → SQL Editor, cada una **una sola vez**:
 
 1. `supabase/migrations/20261011000000_init.sql` — esquema base, RLS, funciones de ventas y stock.
 2. `supabase/migrations/20261012000000_reports_and_team.sql` — costo histórico por venta, `sales_report`, `clinic_team` e `invitation_preview`.
+3. `supabase/migrations/20261013000000_billing.sql` — suscripción de cada clínica (prueba de 14 días + Mercado Pago) e historial de facturación.
 
 Si un script falla a mitad de camino, `supabase/reset_fase1.sql` limpia la Fase 1 (borra datos).
