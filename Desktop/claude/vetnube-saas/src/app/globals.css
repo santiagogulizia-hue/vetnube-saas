@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+
+/* Paleta VetNube: tinta verde azulada para la navegación y turquesa clínico como acento */
+@theme {
+  --color-canvas: #f1f6f6;
+  --color-line: #dce7e7;
+  --color-fg: #132a2c;
+  --color-muted: #587073;
+
+  --color-brand-50: #e9f7f5;
+  --color-brand-100: #d0eeea;
+  --color-brand-200: #a3ddd5;
+  --color-brand-400: #34c4b6;
+  --color-brand-500: #0d9b8f;
+  --color-brand-600: #087b72;
+  --color-brand-700: #0a625c;
+
+  --color-ink-950: #071b1b;
+  --color-ink-900: #0d3333;
+  --color-ink-800: #154644;
+  --color-ink-700: #1a5754;
+  --color-ink-400: #7fa5a2;
+  --color-ink-200: #c6e0de;
+}
+
+@theme inline {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
