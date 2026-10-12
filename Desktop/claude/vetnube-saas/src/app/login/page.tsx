@@ -53,9 +53,16 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
               <input id="email" name="email" type="email" required autoComplete="email" className={inputClass} />
             </div>
             <div className="space-y-1.5">
-              <label htmlFor="password" className="text-sm font-bold text-muted">
-                Contraseña
-              </label>
+              <div className="flex items-baseline justify-between gap-3">
+                <label htmlFor="password" className="text-sm font-bold text-muted">
+                  Contraseña
+                </label>
+                {!isSignUp && (
+                  <Link href="/login/recuperar" className="text-xs font-bold text-brand-600 hover:underline">
+                    ¿Olvidaste tu contraseña?
+                  </Link>
+                )}
+              </div>
               <input
                 id="password"
                 name="password"
