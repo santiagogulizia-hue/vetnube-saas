@@ -3,6 +3,8 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 // /api/webhooks: Mercado Pago llama sin sesión (cada webhook valida su propia firma)
 const PUBLIC_PATHS = ['/login', '/auth', '/api/webhooks']
+// Páginas públicas exactas (sin sus subrutas). "/" es la landing.
+const PUBLIC_EXACT = ['/']
 
 /** Refresca la sesión en cada request y protege las rutas privadas. */
 export async function updateSession(request: NextRequest) {
@@ -30,7 +32,8 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const { pathname } = request.nextUrl
-  const isPublic = PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))
+  const isPublic =
+    PUBLIC_EXACT.includes(pathname) || PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))
 
   if (!user && !isPublic) {
     const url = request.nextUrl.clone()
