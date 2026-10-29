@@ -17,7 +17,7 @@ export const SITE = {
   /** CUIT del titular (ej.: 20-12345678-9) */
   taxId: '20-25779255-3',
   /** Domicilio legal (ej.: Av. Siempre Viva 742, Rosario, Santa Fe) */
-  legalAddress: 'Luis Bernardez 961',
+  legalAddress: 'Luis Bernardez 961, Pavón, Buenos Aires',
   termsUrl: '/terminos',
   privacyUrl: '/privacidad',
 }
