@@ -63,6 +63,9 @@ export function dbErrorMessage(error: DbError) {
       return 'El profesional ya tiene otro turno en ese horario. Elegí otra hora u otro profesional.'
     case '23514':
       return 'Algún valor está fuera del rango permitido. Revisá los datos.'
+    case 'VN402':
+      // Trigger de la migración 20261028000000: clínica sin suscripción vigente
+      return 'La clínica está en modo solo lectura porque la suscripción no está vigente. Suscribite en Configuración → Plan y facturación.'
     default:
       return error.message
   }

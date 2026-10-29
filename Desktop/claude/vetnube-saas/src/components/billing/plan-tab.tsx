@@ -82,9 +82,17 @@ export async function PlanTab({ supabase, clinic, userEmail, mp }: Props) {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="font-display text-3xl font-bold tabular-nums">
-              {price} <span className="text-sm font-normal text-muted">por mes</span>
+              {s.complimentary ? (
+                'Acceso de cortesía'
+              ) : (
+                <>
+                  {price} <span className="text-sm font-normal text-muted">por mes</span>
+                </>
+              )}
             </p>
-            <p className="mt-1 text-sm text-muted">Débito automático mensual con Mercado Pago. Cancelás cuando quieras.</p>
+            <p className="mt-1 text-sm text-muted">
+              {s.complimentary ? 'Sin cargo.' : 'Débito automático mensual con Mercado Pago. Cancelás cuando quieras.'}
+            </p>
           </div>
           <Pill {...STATUS_LABEL[s.status]} />
         </div>
@@ -96,8 +104,11 @@ export async function PlanTab({ supabase, clinic, userEmail, mp }: Props) {
               te suscribís ahora, el primer cobro es al terminar la prueba.
             </>
           )}
-          {s.trialExpired && <>Tu prueba gratuita terminó el {formatDate(billing.trial_ends_at)}.</>}
-          {s.active && (
+          {s.trialExpired && (
+            <>Tu prueba gratuita terminó el {formatDate(billing.trial_ends_at)}. Mientras tanto la clínica queda en modo solo lectura: tus datos están a salvo.</>
+          )}
+          {s.complimentary && <>Tu clínica tiene <b>acceso de cortesía</b>: todas las funciones, sin cargo y sin vencimiento.</>}
+          {s.active && !s.complimentary && (
             <>
               Próximo débito: <b>{billing.next_billing_at ? formatDate(billing.next_billing_at) : 'según Mercado Pago'}</b>
               {billing.mp_payer_email && <> · cuenta {billing.mp_payer_email}</>}.
@@ -138,7 +149,7 @@ export async function PlanTab({ supabase, clinic, userEmail, mp }: Props) {
                 </button>
               </form>
             )}
-            {s.active && owner && (
+            {s.active && !s.complimentary && owner && (
               <form action={cancelSubscription}>
                 <ConfirmSubmit label="Cancelar suscripción" confirmLabel="Sí, cancelar débito automático" />
               </form>

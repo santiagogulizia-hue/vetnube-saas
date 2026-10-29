@@ -33,6 +33,9 @@ export async function signUp(formData: FormData) {
   const next = safeNext(formData.get('next'), '/onboarding')
   const keepNext = next !== '/onboarding' ? `&next=${encodeURIComponent(next)}` : ''
 
+  if (formData.get('accept_terms') !== 'on') {
+    redirect(`/login?modo=registro${keepNext}&error=${encodeURIComponent('Para crear la cuenta tenés que aceptar los términos y la política de privacidad.')}`)
+  }
   if (password.length < 8) {
     redirect(`/login?modo=registro${keepNext}&error=${encodeURIComponent('La contraseña debe tener al menos 8 caracteres.')}`)
   }
@@ -43,7 +46,8 @@ export async function signUp(formData: FormData) {
     email,
     password,
     options: {
-      data: { full_name: fullName },
+      // Constancia de la aceptación (queda en los metadatos del usuario)
+      data: { full_name: fullName, terms_accepted_at: new Date().toISOString() },
       emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
     },
   })

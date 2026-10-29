@@ -18,7 +18,7 @@ import {
 import { BrandLogo } from '@/components/brand-logo'
 import { DEFAULT_PLAN } from '@/lib/billing'
 import { formatMoney } from '@/lib/format'
-import { SITE, TESTIMONIALS, USAGE_STATS, whatsappHref } from '@/lib/site'
+import { LEGAL_LINKS, SITE, TESTIMONIALS, USAGE_STATS, instagramHref, whatsappHref } from '@/lib/site'
 import { DashboardPreview } from './dashboard-preview'
 
 const SIGNUP = '/login?modo=registro'
@@ -309,6 +309,10 @@ const FAQ = [
     a: 'Sí. Cancelás desde Configuración → Plan y facturación y no se hacen más débitos. Sin permanencia mínima.',
   },
   {
+    q: '¿Qué pasa con mis datos si dejo de pagar?',
+    a: 'No se borra nada. La clínica queda en modo solo lectura: ves toda tu información, pero no podés cargar datos nuevos hasta volver a suscribirte.',
+  },
+  {
     q: '¿Emite factura electrónica?',
     a: 'Todavía no. Hoy registra ventas y comprobantes internos, con reportes y exportación para tu contador.',
   },
@@ -376,12 +380,8 @@ export function FinalCta({ loggedIn }: { loggedIn: boolean }) {
 
 export function Footer({ links }: { links: { href: string; label: string }[] }) {
   const year = new Date().getFullYear()
-  // Acepta la URL completa o solo el usuario ("vetnube.ar" o "@vetnube.ar")
-  const instagramHref = SITE.instagram.startsWith('http')
-    ? SITE.instagram
-    : `https://www.instagram.com/${SITE.instagram.replace(/^@/, '')}`
   const social = [
-    SITE.instagram && { href: instagramHref, label: 'Instagram', icon: Instagram },
+    SITE.instagram && { href: instagramHref(), label: 'Instagram', icon: Instagram },
     SITE.linkedin && { href: SITE.linkedin, label: 'LinkedIn', icon: Linkedin },
   ].filter(Boolean) as { href: string; label: string; icon: typeof Instagram }[]
   const wa = whatsappHref('Hola, quiero saber más sobre VetNube')
@@ -447,19 +447,17 @@ export function Footer({ links }: { links: { href: string; label: string }[] }) 
       <div className="border-t border-line">
         <div className={`${container} flex flex-wrap items-center justify-between gap-3 py-5 text-xs text-muted`}>
           <p>
-            © {year} {SITE.name}. Todos los derechos reservados.
+            © {year} {SITE.name}
+            {SITE.legalName && ` · ${SITE.legalName}`}
+            {SITE.taxId && ` · CUIT ${SITE.taxId}`}
+            {SITE.legalAddress && ` · ${SITE.legalAddress}`}. Todos los derechos reservados.
           </p>
-          <nav aria-label="Legales" className="flex gap-4">
-            {SITE.termsUrl && (
-              <a href={SITE.termsUrl} className="hover:text-fg">
-                Términos y condiciones
+          <nav aria-label="Legales" className="flex flex-wrap gap-x-4 gap-y-2">
+            {LEGAL_LINKS.map((l) => (
+              <a key={l.href} href={l.href} className="hover:text-fg" {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                {l.label}
               </a>
-            )}
-            {SITE.privacyUrl && (
-              <a href={SITE.privacyUrl} className="hover:text-fg">
-                Política de privacidad
-              </a>
-            )}
+            ))}
           </nav>
         </div>
       </div>

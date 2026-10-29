@@ -73,6 +73,22 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
                 className={inputClass}
               />
             </div>
+            {isSignUp && (
+              <label className="flex items-start gap-2 text-sm text-muted">
+                <input type="checkbox" name="accept_terms" required className="mt-0.5 size-4 accent-brand-600" />
+                <span>
+                  Acepto los{' '}
+                  <Link href="/terminos" target="_blank" className="font-bold text-brand-600 hover:underline">
+                    Términos y condiciones
+                  </Link>{' '}
+                  y la{' '}
+                  <Link href="/privacidad" target="_blank" className="font-bold text-brand-600 hover:underline">
+                    Política de privacidad
+                  </Link>
+                  .
+                </span>
+              </label>
+            )}
             <button className="w-full rounded-lg bg-brand-600 py-2.5 text-sm font-bold text-white hover:bg-brand-700">
               {isSignUp ? 'Crear cuenta' : 'Ingresar'}
             </button>

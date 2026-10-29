@@ -5,8 +5,8 @@ import { type BillingInfo, billingState } from '@/lib/billing'
 const PLAN_URL = '/configuracion?tab=plan'
 
 /**
- * Aviso arriba de todas las pantallas: últimos días de prueba, prueba vencida
- * o cobro rechazado. Con la suscripción activa no se muestra nada.
+ * Aviso arriba de todas las pantallas: últimos días de prueba, modo solo lectura
+ * (prueba vencida o suscripción terminada) o cobro rechazado. Con la suscripción activa no se muestra nada.
  */
 export function BillingBanner({ billing, canManage }: { billing: BillingInfo; canManage: boolean }) {
   const s = billingState(billing)
@@ -23,17 +23,20 @@ export function BillingBanner({ billing, canManage }: { billing: BillingInfo; ca
   if (s.inTrial && s.trialDaysLeft <= 7) {
     tone = 'bg-amber-50 text-amber-900 border-amber-200'
     message = `Te ${s.trialDaysLeft === 1 ? 'queda 1 día' : `quedan ${s.trialDaysLeft} días`} de prueba gratuita.${canManage ? ' Suscribite para no perder el acceso.' : ''}`
-  } else if (s.trialExpired) {
+  } else if (s.readOnly) {
     tone = 'bg-rose-50 text-rose-800 border-rose-200'
     icon = <AlertTriangle className="size-4 shrink-0" aria-hidden />
-    message = canManage ? 'Terminó tu período de prueba. Suscribite para seguir usando VetNube.' : 'Terminó el período de prueba de la clínica. Avisale al dueño/a.'
+    const reason = s.trialExpired ? 'Terminó el período de prueba' : 'La suscripción no está vigente'
+    message = canManage
+      ? `${reason}: podés ver tus datos, pero no cargar ni modificar nada. Suscribite para seguir usando VetNube.`
+      : `${reason}: la clínica está en modo solo lectura. Avisale al dueño/a.`
   } else if (s.status === 'past_due') {
     tone = 'bg-rose-50 text-rose-800 border-rose-200'
     icon = <AlertTriangle className="size-4 shrink-0" aria-hidden />
     message = 'Mercado Pago no pudo cobrar el plan. Revisá el medio de pago para evitar la suspensión.'
   } else if (s.status === 'cancelled' || s.status === 'paused') {
     tone = 'bg-slate-100 text-slate-700 border-slate-200'
-    message = `La suscripción está ${s.status === 'paused' ? 'pausada' : 'cancelada'}.`
+    message = `La suscripción está ${s.status === 'paused' ? 'pausada' : 'cancelada'}. Podés seguir usando VetNube hasta el fin del período pagado.`
   } else {
     return null
   }

@@ -2,7 +2,8 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 // /api/webhooks: Mercado Pago llama sin sesión (cada webhook valida su propia firma)
-const PUBLIC_PATHS = ['/login', '/auth', '/api/webhooks']
+// Páginas legales: tienen que poder leerse sin cuenta
+const PUBLIC_PATHS = ['/login', '/auth', '/api/webhooks', '/terminos', '/privacidad', '/arrepentimiento']
 // Páginas públicas exactas (sin sus subrutas). "/" es la landing.
 const PUBLIC_EXACT = ['/']
 

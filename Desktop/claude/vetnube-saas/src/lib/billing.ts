@@ -52,6 +52,12 @@ export function billingState(b: BillingInfo, now = Date.now()) {
   const inTrial = b.subscription_status === 'trial' && trialMs > 0
   const trialExpired = b.subscription_status === 'trial' && trialMs <= 0
   const active = b.subscription_status === 'active'
+  const paidUntilMs = b.next_billing_at ? Date.parse(b.next_billing_at) - now : 0
+  // Espejo de clinic_is_writable() en la base (migración 20261028000000)
+  const readOnly =
+    trialExpired ||
+    (b.subscription_status === 'pending' && trialMs <= 0) ||
+    ((b.subscription_status === 'cancelled' || b.subscription_status === 'paused') && paidUntilMs <= 0)
   return {
     status: b.subscription_status,
     plan: planFor(b.plan),
@@ -59,6 +65,10 @@ export function billingState(b: BillingInfo, now = Date.now()) {
     trialExpired,
     trialDaysLeft,
     active,
+    /** Sin suscripción vigente: se ven los datos pero no se puede cargar ni modificar nada */
+    readOnly,
+    /** Acceso sin cargo otorgado a mano (activa sin suscripción de Mercado Pago) */
+    complimentary: active && b.mp_preapproval_id === null,
     /** Necesita suscribirse o regularizar el pago */
     needsAction: trialExpired || b.subscription_status === 'past_due' || b.subscription_status === 'cancelled' || b.subscription_status === 'paused',
   }
