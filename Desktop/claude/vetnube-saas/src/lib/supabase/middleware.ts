@@ -28,9 +28,10 @@ export async function updateSession(request: NextRequest) {
     },
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // getClaims verifica el token localmente (claves asimétricas del proyecto) en vez
+  // de consultar el servidor de Auth en cada request; si venció, lo refresca igual.
+  const { data } = await supabase.auth.getClaims()
+  const user = data?.claims ?? null
 
   const { pathname } = request.nextUrl
   const isPublic =

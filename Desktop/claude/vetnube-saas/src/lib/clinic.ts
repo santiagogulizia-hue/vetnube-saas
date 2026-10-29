@@ -16,10 +16,11 @@ type MembershipRow = { role: MemberRole; clinic: Omit<Clinic, 'role'> | null }
  */
 export const getSession = cache(async () => {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  // Verificación local del token (sin ida y vuelta al servidor de Auth)
+  const { data: auth } = await supabase.auth.getClaims()
+  const claims = auth?.claims
+  if (!claims) redirect('/login')
+  const user = { id: claims.sub, email: claims.email as string | undefined }
 
   const [{ data: profile }, { data: memberships, error: membershipsError }, cookieStore] = await Promise.all([
     supabase.from('profiles').select('full_name').eq('id', user.id).maybeSingle(),

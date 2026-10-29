@@ -19,10 +19,8 @@ export const metadata: Metadata = {
 /** Landing pública. Si la persona ya inició sesión, los botones llevan a su clínica. */
 export default async function LandingPage() {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  const loggedIn = Boolean(user)
+  const { data } = await supabase.auth.getClaims()
+  const loggedIn = Boolean(data?.claims)
 
   const links = [
     { href: '#caracteristicas', label: 'Características' },
