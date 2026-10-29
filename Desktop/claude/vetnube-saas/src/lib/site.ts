@@ -4,20 +4,20 @@
 export const SITE = {
   name: 'VetNube',
   /** Email de contacto y soporte (ej.: hola@vetnube.com.ar) */
-  contactEmail: '',
+  contactEmail: 'damiangulizia@gmail.com',
   /** WhatsApp de ventas/soporte, solo dígitos con código de país (ej.: 5491155550101) */
-  whatsapp: '',
+  whatsapp: '5491137723267',
   instagram: 'vetnube.ar',
   linkedin: '',
   /**
    * Titular del servicio, como figura en AFIP. Lo exige la Ley de Defensa del
    * Consumidor para vender online: se muestra en los términos y en el pie.
    */
-  legalName: '',
+  legalName: 'Nestor Damian Gulizia',
   /** CUIT del titular (ej.: 20-12345678-9) */
-  taxId: '',
+  taxId: '20-25779255-3',
   /** Domicilio legal (ej.: Av. Siempre Viva 742, Rosario, Santa Fe) */
-  legalAddress: '',
+  legalAddress: 'Luis Bernardez 961',
   termsUrl: '/terminos',
   privacyUrl: '/privacidad',
 }
